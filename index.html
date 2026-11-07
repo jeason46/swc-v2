@@ -1,3 +1,12 @@
+perlamae    3
+paragili    0
+aricela     1
+xaviera     2
+belgis      4
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,26 +50,107 @@
         .animate-pulse-fast {
             animation: pulse-fast 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-        .gold-glow-text {
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+        
+        .winner-overlay-custom {
+            background: rgba(15, 15, 15, 0.88);
+            backdrop-filter: blur(2px);
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            box-shadow: inset 0 0 25px rgba(212, 175, 55, 0.15);
         }
-        .green-glow-text {
-            color: #22c55e;
-            text-shadow: 0 0 10px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.5);
+        .draw-overlay-custom {
+            background: rgba(15, 25, 20, 0.90);
+            border: 2px solid rgba(34, 197, 94, 0.5);
         }
-        .gray-glow-text {
-            color: #9ca3af;
-            text-shadow: 0 0 10px rgba(156, 163, 175, 0.8), 0 0 20px rgba(156, 163, 175, 0.5);
+        .cancel-overlay-custom {
+            background: rgba(25, 25, 25, 0.90);
+            border: 2px solid rgba(156, 163, 175, 0.4);
         }
+
+        /* CASINO CHIPS STYLING */
+        .chip-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 11px;
+            color: #fff;
+            border: 3px dashed rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5), inset 0 0 4px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease, filter 0.2s;
+            cursor: pointer;
+        }
+        .chip-btn:active {
+            transform: scale(0.9);
+        }
+        .chip-50 { background: radial-gradient(circle, #e91e63, #c2185b); }
+        .chip-100 { background: radial-gradient(circle, #fbc02d, #f57f17); color: #000; text-shadow: none; }
+        .chip-500 { background: radial-gradient(circle, #4caf50, #2e7d32); }
+        .chip-1k { background: radial-gradient(circle, #2196f3, #1565c0); }
+        .chip-5k { background: radial-gradient(circle, #8d6e63, #4e342e); }
+        .chip-10k { background: radial-gradient(circle, #ff9800, #e65100); }
     </style>
 </head>
 <body class="bg-black text-white min-h-screen flex justify-center items-start">
 
+    <!-- ================= LOGIN OVERLAY SCREEN ================= -->
+    <div id="login-screen" class="fixed inset-0 z-50 bg-[#0d0d0d] flex justify-center items-center p-4">
+        <div class="w-full max-w-sm bg-[#181818] border border-gray-800 rounded-xl p-6 shadow-2xl relative">
+            <div class="text-center mb-6">
+                <h2 class="text-4xl font-black font-teko tracking-wider uppercase text-white flex items-center justify-center space-x-2">
+                    <span class="text-blue-500">SWC</span> <span>V2 ARENA</span>
+                </h2>
+                <p class="text-xs text-gray-400 font-medium mt-1">Enter your credentials to access live betting</p>
+            </div>
+
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Username</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-user text-xs"></i>
+                        </span>
+                        <input type="text" id="login-username" required placeholder="e.g. jeason or admin" 
+                            class="w-full bg-[#121212] border border-gray-700 rounded-lg py-2.5 pl-9 pr-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-lock text-xs"></i>
+                        </span>
+                        <input type="password" id="login-password" required placeholder="••••••••" 
+                            class="w-full bg-[#121212] border border-gray-700 rounded-lg py-2.5 pl-9 pr-10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition">
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-300 focus:outline-none">
+                            <i id="eye-icon" class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="login-error" class="hidden text-red-400 text-xs text-center font-medium bg-red-950/40 border border-red-900/50 py-1.5 rounded">
+                    Invalid username or password.
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black font-teko text-xl py-2.5 rounded-lg uppercase tracking-wider transition shadow-lg mt-2">
+                    LOGIN TO ARENA
+                </button>
+            </form>
+
+            <div class="mt-6 pt-4 border-t border-gray-800 text-center text-[11px] text-gray-500">
+                SWC V2 Secure Access Gateway
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MAIN APP CONTAINER ================= -->
     <div class="w-full max-w-md bg-[#121212] min-h-screen flex flex-col shadow-2xl relative border-x border-gray-800 pb-10">
         
         <!-- ================= HEADER BAR ================= -->
-        <header class="bg-[#181818] px-4 py-2.5 flex items-center justify-between border-b border-gray-800 sticky top-0 z-50">
+        <header class="bg-[#181818] px-4 py-2.5 flex items-center justify-between border-b border-gray-800 sticky top-0 z-40">
             <div class="flex items-center space-x-3">
                 <button onclick="toggleSideMenu()" class="text-blue-400 hover:text-blue-300 focus:outline-none active:scale-95 transition">
                     <i class="fa-solid fa-bars text-2xl"></i>
@@ -75,10 +165,22 @@
                     <div class="bg-gray-100 rounded text-black p-1 text-xs flex items-center justify-center w-5 h-5 font-bold">
                         <i class="fa-solid fa-wallet text-xs"></i>
                     </div>
-                    <span id="wallet-balance" class="font-extrabold text-white text-sm tracking-wide">₱20.00</span>
+                    <span id="wallet-balance" class="font-extrabold text-white text-sm tracking-wide">₱1,000.00</span>
                 </div>
-                <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white cursor-pointer hover:bg-blue-500 transition">
-                    <i class="fa-solid fa-user text-sm"></i>
+                <div class="relative group">
+                    <div onclick="toggleProfileDropdown()" class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white cursor-pointer hover:bg-blue-500 transition shadow">
+                        <i class="fa-solid fa-user text-sm"></i>
+                    </div>
+                    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-[#1e1e1e] border border-gray-700 rounded-lg shadow-2xl py-1 z-50">
+                        <div class="px-3 py-2 border-b border-gray-800">
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Signed in as</p>
+                            <p id="profile-username-display" class="text-xs font-black text-white truncate">User</p>
+                        </div>
+                        <button onclick="handleLogout()" class="w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-gray-800 flex items-center space-x-2 font-bold transition">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -86,7 +188,7 @@
         <!-- ================= EVENT SUB-HEADER ================= -->
         <div class="bg-[#181818] px-4 py-2 flex justify-between items-center text-xs border-b border-gray-800 font-bold uppercase tracking-wider text-gray-200">
             <span class="text-sm font-black font-teko tracking-widest text-gray-100">8 STAG BIG EVENT MATIRA MA..</span>
-            <span class="text-gray-400 text-[11px]" id="current-date">September 27, 2026</span>
+            <span class="text-gray-400 text-[11px]" id="current-date">November 6, 2026</span>
         </div>
 
         <!-- ================= VIDEO PLAYER CONTAINER ================= -->
@@ -101,8 +203,8 @@
             </div>
         
             <div id="video-live-view" class="hidden absolute inset-0 w-full h-full bg-gray-900 flex flex-col justify-center items-center">
-                <video id="live-video-element" class="w-full h-full object-cover" autoplay playsinline muted loop>
-                    <source src="video_2026-10-27_13-31-08.mp4" type="video/mp4">
+                <video id="live-video-element" class="w-full h-full object-cover" autoplay playsinline muted loop preload="auto">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
         
@@ -111,22 +213,37 @@
                     <span>LIVE STREAM</span>
                 </div>
             </div>
+
+            <!-- ================= VIDEO SCRUBBER / CONTROLS BAR ================= -->
+            <div id="video-controls-bar" class="absolute bottom-8 inset-x-0 bg-black/60 px-3 py-1.5 flex items-center space-x-2 text-xs text-white z-20 transition-all duration-300">
+                <button onclick="togglePlayPause()" id="play-pause-btn" class="hover:text-blue-400 focus:outline-none">
+                    <i class="fa-solid fa-pause text-xs"></i>
+                </button>
+                <span id="current-time-disp" class="text-[10px] font-mono">00:00</span>
+                
+                <input type="range" id="video-seekbar" value="0" min="0" max="100" step="0.1" 
+                    class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500" 
+                    oninput="seekVideo(this.value)">
+                
+                <span id="duration-disp" class="text-[10px] font-mono">-55:49</span>
+            </div>
         
-            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-2 flex justify-between items-center text-xs text-gray-300 z-20">
+            <!-- DISPLAY-ONLY VIDEO OVERLAY BAR -->
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-2 flex justify-between items-center text-xs text-gray-300 z-20 pointer-events-none">
                 <div class="flex items-center space-x-3">
-                    <button id="v1-btn" onclick="toggleStreamMode()" class="flex items-center space-x-1 text-blue-400 font-bold hover:text-blue-300 transition text-xs">
+                    <div class="flex items-center space-x-1 text-blue-400 font-bold text-xs">
                         <i class="fa-solid fa-video"></i>
-                        <span id="stream-label">V1</span>
-                    </button>
+                        <span id="stream-label">STREAM (LIVE)</span>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <button onclick="refreshStream()" class="hover:text-white transition flex items-center space-x-1 active:rotate-180 duration-300">
-                        <i class="fa-solid fa-rotate-right"></i>
+                <div class="flex items-center space-x-3 opacity-90">
+                    <div class="flex items-center space-x-1">
+                        <i class="fa-solid fa-rotate-right text-xs"></i>
                         <span class="text-[11px] font-bold">RF</span>
-                    </button>
-                    <button onclick="toggleFullscreen()" class="hover:text-white transition">
+                    </div>
+                    <div>
                         <i class="fa-solid fa-expand text-xs"></i>
-                    </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -134,10 +251,10 @@
         <!-- ================= FIGHT STATUS BAR ================= -->
         <div class="bg-[#181818] px-4 py-2.5 flex justify-between items-center border-b border-gray-800">
             <div>
-                <h2 id="fight-title" class="text-2xl font-black font-teko uppercase tracking-wide text-white leading-none">FIGHT # <span id="fight-num-display">1</span></h2>
+                <h2 id="fight-title" class="text-2xl font-black font-teko uppercase tracking-wide text-white leading-none">FIGHT # <span id="fight-num-display">7</span></h2>
                 <div id="countdown-container" class="text-[11px] text-yellow-400 font-bold flex items-center space-x-1 mt-0.5">
                     <i class="fa-solid fa-stopwatch text-xs"></i>
-                    <span>NEXT RESET: <span id="round-timer" class="text-white font-extrabold font-mono">00:00</span></span>
+                    <span>STATUS: <span id="round-timer" class="text-white font-extrabold font-mono">TIMELINE</span></span>
                 </div>
             </div>
             
@@ -156,109 +273,151 @@
         <!-- ================= BETTING COLUMNS SPLIT LAYOUT ================= -->
         <div class="grid grid-cols-2 gap-0 border-b border-gray-800 relative">
             
-            <!-- GLOBAL OVERLAY FOR DRAW AND CANCEL -->
-            <div id="global-result-overlay" class="hidden absolute inset-0 z-40 flex flex-col items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+            <!-- GLOBAL RESULT OVERLAY (FOR DRAW / CANCEL) -->
+            <div id="global-result-overlay" class="hidden absolute inset-0 z-30 flex flex-col items-center justify-center p-4 transition-all duration-300">
                 <div id="result-icon-container" class="mb-1"></div>
                 <h2 id="result-title-display" class="text-4xl font-black font-teko tracking-widest uppercase leading-none"></h2>
                 <p id="result-sub-text" class="text-xs font-bold uppercase tracking-wider mt-1 text-gray-200"></p>
             </div>
 
-            <!-- MERON SIDE (RED) -->
+            <!-- MERON SIDE -->
             <div id="meron-box" class="bg-[#141414] border-r border-gray-800 flex flex-col justify-between p-2.5 text-center relative overflow-hidden">
-                
-                <!-- MERON WINNER OVERLAY WITH TROPHY LOGO -->
-                <div id="meron-winner-overlay" class="hidden absolute inset-0 bg-yellow-950/80 z-30 flex flex-col items-center justify-center border-4 border-yellow-500 p-2 backdrop-blur-sm">
-                    <i class="fa-solid fa-trophy text-4xl gold-glow-text mb-1 animate-bounce"></i>
-                    <h2 class="text-3xl font-black font-teko gold-glow-text tracking-widest uppercase leading-none">WINNER!</h2>
+                <!-- MERON WINNER OVERLAY -->
+                <div id="meron-winner-overlay" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-2 winner-overlay-custom transition-all duration-300">
+                    <i class="fa-solid fa-trophy text-4xl text-yellow-400 mb-1 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)] animate-bounce"></i>
+                    <h2 class="text-3xl font-black font-teko text-yellow-400 tracking-widest uppercase leading-none drop-shadow-[0_0_8px_rgba(234,179,8,0.4)]">WINNER!</h2>
                 </div>
 
-                <div class="bg-[#cc0000] text-white py-1.5 rounded-t-sm shadow-md mb-2">
+                <div class="bg-[#cc0000] text-white py-1 rounded-t-sm shadow-md mb-1.5 flex items-center justify-center space-x-1">
+                    <i class="fa-solid fa-plus text-xs"></i>
                     <h3 class="text-2xl font-black font-teko tracking-wider uppercase leading-none">MERON</h3>
                 </div>
 
-                <div class="my-1">
-                    <div id="meron-pool" class="text-yellow-400 text-xl sm:text-2xl font-black font-teko tracking-tight">₱50,000.00</div>
-                    <div class="text-[11px] text-gray-300 font-bold uppercase mt-0.5">PAYOUT = <span id="meron-payout" class="text-white font-extrabold">1.80</span></div>
+                <div class="my-0.5">
+                    <div id="meron-pool" class="text-yellow-400 text-2xl font-black font-teko tracking-tight">₱0.00</div>
+                    <div class="text-[10px] text-gray-300 font-bold uppercase">PAYOUT = <span id="meron-thanks">1.97</span></div>
                 </div>
 
-                <div class="space-y-1.5 my-2">
-                    <div class="bg-[#242424] rounded-full py-1 px-3 border border-gray-700 text-xs text-gray-300 font-bold flex justify-center items-center">
+                <div class="space-y-1 my-1.5">
+                    <div class="bg-[#222] rounded-full py-0.5 px-2 border border-gray-700 text-[11px] text-gray-300 font-bold flex justify-center items-center">
                         <span id="meron-user-bet">BET: ₱0.00</span>
                     </div>
-                    <div class="bg-[#242424] rounded-full py-1 px-3 border border-gray-700 text-xs text-gray-300 font-bold flex justify-center items-center">
+                    <div class="bg-[#222] rounded-full py-0.5 px-2 border border-gray-700 text-[11px] text-gray-300 font-bold flex justify-center items-center">
                         <span id="meron-user-pays">PAYS: ₱0.00</span>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-1 my-1">
-                    <button onclick="addQuickBet('meron', 100)" class="bg-gray-800 hover:bg-gray-700 text-[10px] font-bold py-1 rounded border border-gray-700">+100</button>
-                    <button onclick="addQuickBet('meron', 500)" class="bg-gray-800 hover:bg-gray-700 text-[10px] font-bold py-1 rounded border border-gray-700">+500</button>
-                    <button onclick="addQuickBet('meron', 1000)" class="bg-gray-800 hover:bg-gray-700 text-[10px] font-bold py-1 rounded border border-gray-700">+1k</button>
-                </div>
-
-                <button id="btn-bet-meron" onclick="placeBet('meron')" class="w-full bg-[#d32f2f] hover:bg-[#b71c1c] active:scale-95 text-white font-black font-teko text-xl py-2 rounded-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center space-x-1 mt-1">
-                    <i class="fa-solid fa-plus text-xs"></i>
+                <button id="btn-bet-meron" onclick="placeBet('meron')" class="w-full bg-[#d32f2f] hover:bg-[#b71c1c] active:scale-95 text-white font-black font-teko text-lg py-1.5 rounded-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center space-x-1">
                     <span>BET MERON</span>
                 </button>
             </div>
 
-            <!-- WALA SIDE (BLUE) -->
+            <!-- WALA SIDE -->
             <div id="wala-box" class="bg-[#141414] flex flex-col justify-between p-2.5 text-center relative overflow-hidden">
-                
-                <!-- WALA WINNER OVERLAY WITH TROPHY LOGO -->
-                <div id="wala-winner-overlay" class="hidden absolute inset-0 bg-yellow-950/80 z-30 flex flex-col items-center justify-center border-4 border-yellow-500 p-2 backdrop-blur-sm">
-                    <i class="fa-solid fa-trophy text-4xl gold-glow-text mb-1 animate-bounce"></i>
-                    <h2 class="text-3xl font-black font-teko gold-glow-text tracking-widest uppercase leading-none">WINNER!</h2>
+                <!-- WALA WINNER OVERLAY -->
+                <div id="wala-winner-overlay" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-2 winner-overlay-custom transition-all duration-300">
+                    <i class="fa-solid fa-trophy text-4xl text-yellow-400 mb-1 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)] animate-bounce"></i>
+                    <h2 class="text-3xl font-black font-teko text-yellow-400 tracking-widest uppercase leading-none drop-shadow-[0_0_8px_rgba(234,179,8,0.4)]">WINNER!</h2>
                 </div>
 
-                <div class="bg-[#0055ff] text-white py-1.5 rounded-t-sm shadow-md mb-2">
+                <div class="bg-[#0055ff] text-white py-1 rounded-t-sm shadow-md mb-1.5 flex items-center justify-center space-x-1">
+                    <i class="fa-solid fa-plus text-xs"></i>
                     <h3 class="text-2xl font-black font-teko tracking-wider uppercase leading-none">WALA</h3>
                 </div>
 
-                <div class="my-1">
-                    <div id="wala-pool" class="text-yellow-400 text-xl sm:text-2xl font-black font-teko tracking-tight">₱50,000.00</div>
-                    <div class="text-[11px] text-gray-300 font-bold uppercase mt-0.5">PAYOUT = <span id="wala-payout" class="text-white font-extrabold">1.80</span></div>
+                <div class="my-0.5">
+                    <div id="wala-pool" class="text-yellow-400 text-2xl font-black font-teko tracking-tight">₱0.00</div>
+                    <div class="text-[10px] text-gray-300 font-bold uppercase">PAYOUT = <span id="wala-thanks">1.65</span></div>
                 </div>
 
-                <div class="space-y-1.5 my-2">
-                    <div class="bg-[#242424] rounded-full py-1 px-3 border border-gray-700 text-xs text-gray-300 font-bold flex justify-center items-center">
+                <div class="space-y-1 my-1.5">
+                    <div class="bg-[#222] rounded-full py-0.5 px-2 border border-gray-700 text-[11px] text-gray-300 font-bold flex justify-center items-center">
                         <span id="wala-user-bet">BET: ₱0.00</span>
                     </div>
-                    <div class="bg-[#242424] rounded-full py-1 px-3 border border-gray-700 text-xs text-gray-300 font-bold flex justify-center items-center">
+                    <div class="bg-[#222] rounded-full py-0.5 px-2 border border-gray-700 text-[11px] text-gray-300 font-bold flex justify-center items-center">
                         <span id="wala-user-pays">PAYS: ₱0.00</span>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-1 my-1">
-                    <button onclick="addQuickBet('wala', 100)" class="bg-gray-800 hover:bg-gray-700 text-[10px] font-bold py-1 rounded border border-gray-700">+100</button>
-                    <button onclick="addQuickBet('wala', 500)" class="bg-gray-800 hover:bg-gray-700 text-[10px] font-bold py-1 rounded border border-gray-700">+500</button>
-                    <button onclick="addQuickBet('wala', 1000)" class="bg-gray-800 hover:bg-gray-700 text-[10px] font-bold py-1 rounded border border-gray-700">+1k</button>
-                </div>
-
-                <button id="btn-bet-wala" onclick="placeBet('wala')" class="w-full bg-[#1976d2] hover:bg-[#0d47a1] active:scale-95 text-white font-black font-teko text-xl py-2 rounded-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center space-x-1 mt-1">
-                    <i class="fa-solid fa-plus text-xs"></i>
+                <button id="btn-bet-wala" onclick="placeBet('wala')" class="w-full bg-[#1976d2] hover:bg-[#0d47a1] active:scale-95 text-white font-black font-teko text-lg py-1.5 rounded-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center space-x-1">
                     <span>BET WALA</span>
                 </button>
             </div>
 
         </div>
 
-        <!-- ================= FIGHT HISTORY CRYSTAL ROAD MAP ================= -->
-        <div class="bg-[#111111] p-3 border-b border-gray-800 flex flex-col space-y-1.5">
-            <div class="flex justify-between items-center text-[11px] font-bold text-gray-400 uppercase">
-                <span>Crystal Road Map (Scoreboard)</span>
-                <span class="font-teko tracking-wider flex items-center space-x-1">
-                    <span class="text-red-500">🔴 MERON</span>
-                    <span class="text-blue-500">🔵 WALA</span>
-                    <span class="text-green-500">🟢 DRAW</span>
-                    <span class="text-gray-400">⚪ CANCEL</span>
-                </span>
+        <!-- ================= CASINO CHIPS & EDITABLE INPUT SECTION ================= -->
+        <div class="bg-[#0f0f0f] p-3 border-b border-gray-800 flex flex-col space-y-2.5">
+            <div class="flex items-center justify-between space-x-2">
+                <!-- FOCUS & EDITABLE INPUT FIELD -->
+                <div class="flex-1 bg-black/80 border border-gray-700 rounded p-1.5 flex items-center justify-between">
+                    <div class="flex items-center space-x-1.5 w-full">
+                        <div class="w-5 h-5 rounded-full bg-gray-300 border border-white flex items-center justify-center flex-shrink-0">
+                            <span class="w-2 h-2 rounded-full bg-black"></span>
+                        </div>
+                        <input type="number" id="custom-bet-input" value="500" min="1" step="1"
+                            oninput="updateActiveChipFromInput(this.value)"
+                            class="w-full bg-transparent text-yellow-400 font-black font-teko text-xl focus:outline-none focus:ring-1 focus:ring-yellow-400 rounded px-1" />
+                    </div>
+                </div>
+                
+                <button onclick="betAllIn()" class="bg-[#0091ea] hover:bg-[#00b0ff] active:scale-95 text-white font-black font-teko text-xl px-5 py-1.5 rounded flex items-center space-x-1.5 shadow-lg flex-shrink-0">
+                    <i class="fa-solid fa-compass-drafting text-sm"></i>
+                    <span>ALL IN!</span>
+                </button>
             </div>
-            
-            <!-- Container Height adjusted to fit rows cleanly; scroll always defaults to TOP-RIGHT -->
-            <div id="road-map-scroll-container" class="bg-black/90 border border-gray-800 rounded p-2 min-h-[160px] max-h-[220px] overflow-x-auto overflow-y-auto custom-scroll cursor-grab active:cursor-grabbing">
-                <div id="crystal-road-grid" class="flex space-x-1.5 items-start min-w-max">
-                    <!-- Kusang pupunuin ng JavaScript -->
+
+            <!-- CHIPS ROW -->
+            <div class="flex items-center justify-between px-1">
+                <div onclick="selectChip(50)" class="chip-btn chip-50">50</div>
+                <div onclick="selectChip(100)" class="chip-btn chip-100">100</div>
+                <div onclick="selectChip(500)" class="chip-btn chip-500">500</div>
+                <div onclick="selectChip(1000)" class="chip-btn chip-1k">1K</div>
+                <div onclick="selectChip(5000)" class="chip-btn chip-5k">5K</div>
+                <div onclick="selectChip(10000)" class="chip-btn chip-10k">10K</div>
+            </div>
+        </div>
+
+        <!-- ================= SALAMAT BAR & ROADMAP ================= -->
+        <div class="bg-[#111111] p-3 border-b border-gray-800 flex flex-col space-y-2">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <h3 class="text-2xl font-black font-teko tracking-wider text-white leading-none">DRAW X8</h3>
+                    <span id="salamat-val" class="text-yellow-400 font-black font-teko text-xl">₱0.00</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-[#242424] border border-gray-700 px-2 py-0.5 rounded text-[11px] font-bold text-gray-300">
+                        B: ₱0.00
+                    </div>
+                    <button class="bg-[#00c853] hover:bg-[#00e676] text-black font-bold px-3 py-1 rounded text-xs uppercase flex items-center space-x-1 shadow">
+                        <i class="fa-solid fa-plus text-[10px]"></i>
+                        <span>DRAW</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CRYSTAL ROADMAP GRID -->
+            <div id="road-map-scroll-container" class="bg-black/90 border border-gray-800 rounded p-2 min-h-[150px] max-h-[200px] overflow-x-auto overflow-y-auto custom-scroll cursor-grab active:cursor-grabbing">
+                <div id="crystal-road-grid" class="flex space-x-1.5 items-start min-w-max"></div>
+            </div>
+
+            <!-- BOTTOM PERCENTAGE RATING CARDS -->
+            <div class="grid grid-cols-4 gap-1.5 pt-1">
+                <div class="bg-[#1a1a1a] border border-gray-800 rounded p-1 text-center">
+                    <div class="text-[9px] font-bold text-red-400 uppercase">MERON</div>
+                    <div id="stat-p1" class="bg-[#d32f2f] text-white text-xs font-black rounded mt-0.5 py-0.5">50.59%</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-gray-800 rounded p-1 text-center">
+                    <div class="text-[9px] font-bold text-gray-300 uppercase">CANCEL</div>
+                    <div id="stat-cancel" class="bg-[#333333] text-white text-xs font-black rounded mt-0.5 py-0.5">1.18%</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-gray-800 rounded p-1 text-center">
+                    <div class="text-[9px] font-bold text-green-400 uppercase">DRAW</div>
+                    <div id="stat-loko" class="bg-[#2e7d32] text-white text-xs font-black rounded mt-0.5 py-0.5">3.53%</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-gray-800 rounded p-1 text-center">
+                    <div class="text-[9px] font-bold text-blue-400 uppercase">WALA</div>
+                    <div id="stat-p3" class="bg-[#1976d2] text-white text-xs font-black rounded mt-0.5 py-0.5">44.71%</div>
                 </div>
             </div>
         </div>
@@ -266,18 +425,34 @@
         <!-- ================= SIMULATION CONTROL FOOTER ================= -->
         <div class="bg-[#181818] p-3 border-t border-gray-800 text-xs text-gray-400 flex flex-col space-y-2">
             <div class="flex justify-between items-center">
-                <span class="font-bold text-gray-300 uppercase text-[10px]">Simulation Controls:</span>
-                <button onclick="resetWallet()" class="bg-gray-800 hover:bg-gray-700 text-gray-200 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-700">
-                    <i class="fa-solid fa-coins mr-1"></i> Cash In ₱1,000
-                </button>
+                <span class="font-bold text-gray-300 uppercase text-[10px]">SIMULATION CONTROLS:</span>
             </div>
-            
+
+            <!-- SIMULATE LIVE POOL ODDS TOGGLE -->
             <div class="flex items-center justify-between bg-black/40 p-2 rounded border border-gray-800">
-                <span class="text-[11px]">Simulate Live Pool Odds:</span>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="live-pool-toggle" class="sr-only peer" checked onchange="toggleLivePoolSimulation()">
+                <span class="text-[11px]">Step +500 Fast Count Animation:</span>
+                <div class="relative inline-flex items-center cursor-pointer" onclick="handleSecureToggle('live-pool-toggle', toggleLivePoolSimulation)">
+                    <input type="checkbox" id="live-pool-toggle" class="sr-only peer" checked pointer-events="none">
                     <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
+                </div>
+            </div>
+
+            <!-- SHOW VIDEO CONTROLS BAR TOGGLE -->
+            <div class="flex items-center justify-between bg-black/40 p-2 rounded border border-gray-800">
+                <span class="text-[11px]">Show Video Controls Bar:</span>
+                <div class="relative inline-flex items-center cursor-pointer" onclick="handleSecureToggle('video-controls-toggle', toggleVideoControlsVisibility)">
+                    <input type="checkbox" id="video-controls-toggle" class="sr-only peer" pointer-events="none">
+                    <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </div>
+            </div>
+
+            <!-- LOCK VIDEO TIME ON REFRESH TOGGLE -->
+            <div class="flex items-center justify-between bg-black/40 p-2 rounded border border-gray-800">
+                <span class="text-[11px] text-yellow-400 font-bold">Lock Video Time on Refresh (Anti-Reset):</span>
+                <div class="relative inline-flex items-center cursor-pointer" onclick="handleSecureToggle('lock-video-toggle', toggleLockVideoState)">
+                    <input type="checkbox" id="lock-video-toggle" class="sr-only peer" checked pointer-events="none">
+                    <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </div>
             </div>
         </div>
 
@@ -316,8 +491,12 @@
                         </a>
                     </nav>
                 </div>
-                <div class="border-t border-gray-800 pt-3 text-xs text-gray-500">
-                    SWC V2 Mobile Interface Prototype
+                <div class="border-t border-gray-800 pt-3 flex flex-col space-y-2">
+                    <button onclick="handleLogout()" class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded text-xs font-bold flex items-center justify-center space-x-2 transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Sign Out</span>
+                    </button>
+                    <div class="text-[10px] text-gray-500 text-center">SWC V2 Mobile Interface Prototype</div>
                 </div>
             </div>
             <div class="flex-1" onclick="toggleSideMenu()"></div>
@@ -326,68 +505,533 @@
     </div>
 
     <script>
-        let walletBalance = 20.00;
-        let meronPool = 50000.00; 
-        let walaPool = 50000.00;  
-        let meronPayout = 1.80;
-        let walaPayout = 1.80;
+        const TARGET_START_FIGHT = 6; 
+        const TARGET_INDEX = TARGET_START_FIGHT - 1; 
 
-        let meronUserBet = 0.00;
-        let walaUserBet = 0.00;
-
-        let selectedBetAmounts = { meron: 0, wala: 0 };
-
+        let timerSequence = [
+            { videoTime: 2,  endTime: 179,  meronMax: 900022, walaMax: 868643, winner: 'meron', label: 'Fight 1' },
+            { videoTime: 2,  endTime: 359,  meronMax: 870000, walaMax: 900554, winner: 'meron', label: 'Fight 2' },
+            { videoTime: 2,  endTime: 539,  meronMax: 650123, walaMax: 878790, winner: 'meron', label: 'Fight 3' },
+            { videoTime: 2,  endTime: 719,  meronMax: 340312, walaMax: 658943, winner: 'wala', label: 'Fight 4' },
+            { videoTime: 2,  endTime: 899,  meronMax: 654342, walaMax: 765678, winner: 'wala',  label: 'Fight 5' },
+            { videoTime: 10,  endTime: 10, meronMax: 765312, walaMax: 543456, winner: 'meron', label: 'Fight 6' },
+            { videoTime: 200,  endTime: 200, meronMax: 755089, walaMax: 900321, winner: 'meron',  label: 'Fight 7' },
+            { videoTime: 339,  endTime: 339, meronMax: 986543, walaMax: 435256, winner: 'cancel', label: 'Fight 8' },
+            { videoTime: 489,  endTime: 489, meronMax: 324768, walaMax: 898032, winner: 'wala',label: 'Fight 9' },
+            { videoTime: 696,  endTime: 696, meronMax: 978435, walaMax: 767546, winner: 'meron',  label: 'Fight 10' }
+        ];
+        
+        let sequenceIndex = TARGET_INDEX;
+        let fightHistoryRecords = [];
+        let isBettingOpen = true; 
+        
+        let walletBalance = localStorage.getItem('swc_wallet') ? parseFloat(localStorage.getItem('swc_wallet')) : 100.00;
+        
+        let meronPool = 100;
+        let walaPool = 100;
+        let meronPayout = 1.97;
+        let walaPayout = 1.65;
+        
+        let activeChipValue = 500;
+        let meronUserBet = localStorage.getItem(`swc_meron_user_bet_${sequenceIndex}`) ? parseFloat(localStorage.getItem(`swc_meron_user_bet_${sequenceIndex}`)) : 0.00;
+        let walaUserBet = localStorage.getItem(`swc_wala_user_bet_${sequenceIndex}`) ? parseFloat(localStorage.getItem(`swc_wala_user_bet_${sequenceIndex}`)) : 0.00;
+        let hasPaidWinnings = false;
+        
         const statusList = [
             { text: 'OPEN FOR BETTING', color: 'bg-green-500 text-black', open: true },
             { text: 'CLOSED', color: 'bg-amber-400 text-black', open: false },
             { text: 'SETTLED', color: 'bg-gray-600 text-white', open: false }
         ];
         let currentStatusIdx = 0; 
-
-        let isLiveStream = false;
-        let poolSimulationInterval = null;
-
-        // --- 20 ROUNDS SEQUENCE NA MAY ORAS, MAX LIMITS, AT WINNER / DRAW / CANCEL ---
-        let timerSequence = [
-            { seconds: 2, meronMax: 50000, walaMax: 60000, winner: 'wala' },   // 1st
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 2nd
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'draw' },   // 3rd - DRAW (GREEN)
-            { seconds: 2, meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 4th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'cancel' }, // 5th - CANCEL (GRAY)
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'wala' },   // 6th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'wala' },   // 7th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'wala' },   // 8th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'draw' },   // 9th - DRAW (GREEN)
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 10th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 11th
-            { seconds: 2, meronMax: 50000, walaMax: 60000, winner: 'wala' },   // 12th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 13th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 14th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'cancel' },// 15th - CANCEL (GRAY)
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 16th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'meron' },  // 17th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'wala' },   // 18th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'wala' },   // 19th
-            { seconds: 2,  meronMax: 50000, walaMax: 60000, winner: 'wala' }    // 20th
-        ];
-
-        let sequenceIndex = 0;
-        let timerSeconds = timerSequence[sequenceIndex].seconds; 
-        let timerInterval = null;
-        
-        let currentMeronMax = timerSequence[sequenceIndex].meronMax;
-        let currentWalaMax = timerSequence[sequenceIndex].walaMax;
-
-        let maxLimitReached = false; 
-        let fightHistoryRecords = []; 
+        let isLiveStream = localStorage.getItem('swc_is_live') === 'true';
+        let isLockVideoState = localStorage.getItem('swc_lock_video') !== 'false'; 
+        let countingAnimationTimer = null;
+        let delayTimer = null;
 
         window.onload = function() {
-            recalculateOdds();
-            updateUI();
-            toggleLivePoolSimulation();
-            startAutoResetTimer();
+            document.getElementById('lock-video-toggle').checked = isLockVideoState;
+        
+            restoreVideoState();
             setupRoadMapDragScroll();
+            checkExistingSession();
+            initVideoControls();
+        
+            document.getElementById('video-controls-bar').classList.add('hidden');
+        
+            const savedFight = localStorage.getItem('swc_current_fight_idx');
+            if (savedFight !== null) {
+                sequenceIndex = parseInt(savedFight);
+            }
+        
+            // BASAHIN ANG NA-SAVE NA PUSTA NG USER SA CURRENT FIGHT
+            meronUserBet = localStorage.getItem(`swc_meron_user_bet_${sequenceIndex}`) ? parseFloat(localStorage.getItem(`swc_meron_user_bet_${sequenceIndex}`)) : 0.00;
+            walaUserBet = localStorage.getItem(`swc_wala_user_bet_${sequenceIndex}`) ? parseFloat(localStorage.getItem(`swc_wala_user_bet_${sequenceIndex}`)) : 0.00;
+        
+            const savedMeron = localStorage.getItem(`swc_meron_pool_${sequenceIndex}`);
+            const savedWala = localStorage.getItem(`swc_wala_pool_${sequenceIndex}`);
+            const savedStatus = localStorage.getItem(`swc_bet_status_${sequenceIndex}`);
+        
+            if (savedMeron !== null && savedWala !== null) {
+                meronPool = parseFloat(savedMeron);
+                walaPool = parseFloat(savedWala);
+                setBettingStatus(savedStatus === 'open');
+            } else {
+                meronPool = 755089;
+                walaPool = 900321;
+                setBettingStatus(true);
+            }
+        
+            rebuildHistoryUpTo(sequenceIndex - 1);
+            renderCrystalRoadMap();
+            recalculateOdds();
+            
+            // TIYAKING NAKA-UPDATE ANG BET AT PAYS TEXT SA UI PAGKAREFRESH
+            updateUI();
+        
+            const curr = timerSequence[sequenceIndex];
+            if (meronPool < curr.meronMax || walaPool < curr.walaMax) {
+                startFastCountingToTarget(curr.meronMax, curr.walaMax);
+            }
         };
+
+        function setBettingStatus(isOpen) {
+            isBettingOpen = isOpen;
+            const badge = document.getElementById('fight-status-badge');
+            const statusText = document.getElementById('status-text');
+            const btnMeron = document.getElementById('btn-bet-meron');
+            const btnWala = document.getElementById('btn-bet-wala');
+            const betInput = document.getElementById('custom-bet-input');
+
+            if (isOpen) {
+                badge.className = 'bg-green-500 text-black font-extrabold text-xs px-3 py-1 rounded-sm uppercase tracking-wider flex items-center space-x-1.5 shadow';
+                statusText.innerText = 'OPEN FOR BETTING';
+                
+                btnMeron.disabled = false;
+                btnWala.disabled = false;
+                betInput.disabled = false;
+                btnMeron.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnWala.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                badge.className = 'bg-amber-400 text-black font-extrabold text-xs px-3 py-1 rounded-sm uppercase tracking-wider flex items-center space-x-1.5 shadow';
+                statusText.innerText = 'CLOSED';
+                
+                btnMeron.disabled = true;
+                btnWala.disabled = true;
+                betInput.disabled = true;
+                btnMeron.classList.add('opacity-50', 'cursor-not-allowed');
+                btnWala.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function updateActiveChipFromInput(val) {
+            let numVal = parseFloat(val);
+            if (isNaN(numVal) || numVal < 0) {
+                activeChipValue = 0;
+            } else {
+                activeChipValue = numVal;
+            }
+        }
+
+        function selectChip(val) {
+            activeChipValue = val;
+            document.getElementById('custom-bet-input').value = val;
+            showToast(`Selected Chip: ₱${val}`, "fa-coins");
+        }
+
+        function betAllIn() {
+            if (walletBalance <= 0) {
+                showToast("Insufficient Balance for ALL IN!", "fa-circle-xmark");
+                return;
+            }
+            activeChipValue = walletBalance;
+            document.getElementById('custom-bet-input').value = walletBalance;
+            showToast(`ALL IN selected: ${formatPHP(walletBalance)}`, "fa-bolt");
+        }
+
+        function handleSecureToggle(checkboxId, callbackFunction) {
+            const pin = prompt("IMPUT PASS:");
+
+            if (pin === "12345") {
+                const checkbox = document.getElementById(checkboxId);
+                checkbox.checked = !checkbox.checked;
+
+                if (typeof callbackFunction === 'function') {
+                    callbackFunction();
+                }
+                showToast("Tamang password! Na-update ang setting.", "fa-shield-halved");
+            } else if (pin !== null) {
+                showToast("Mali ang password! Na-block ang pagbago.", "fa-circle-xmark");
+            }
+        }
+
+        function restoreVideoState() {
+            const errorView = document.getElementById('video-error-view');
+            const liveView = document.getElementById('video-live-view');
+            const videoEl = document.getElementById('live-video-element');
+
+            errorView.classList.add('hidden');
+            liveView.classList.remove('hidden');
+
+            if (videoEl) {
+                if (isLockVideoState) {
+                    const savedTime = localStorage.getItem('swc_video_current_time');
+                    if (savedTime !== null) {
+                        videoEl.currentTime = parseFloat(savedTime);
+                    }
+                }
+
+                videoEl.play().catch(e => console.log('Autoplay active:', e));
+
+                setInterval(() => {
+                    if (isLockVideoState && !videoEl.paused) {
+                        localStorage.setItem('swc_video_current_time', videoEl.currentTime);
+                    }
+                }, 1000);
+            }
+        }
+
+        function toggleLockVideoState() {
+            isLockVideoState = document.getElementById('lock-video-toggle').checked;
+            localStorage.setItem('swc_lock_video', isLockVideoState);
+            
+            if (isLockVideoState) {
+                const videoEl = document.getElementById('live-video-element');
+                if (videoEl) {
+                    localStorage.setItem('swc_video_current_time', videoEl.currentTime);
+                }
+                showToast("Anti-Reset Lock ON", "fa-lock");
+            } else {
+                localStorage.removeItem('swc_video_current_time');
+                showToast("Anti-Reset Lock OFF", "fa-lock-open");
+            }
+        }
+
+        function initVideoControls() {
+            const videoEl = document.getElementById('live-video-element');
+            const seekbar = document.getElementById('video-seekbar');
+            const currentTimeDisp = document.getElementById('current-time-disp');
+            const durationDisp = document.getElementById('duration-disp');
+
+            if (videoEl) {
+                videoEl.addEventListener('timeupdate', () => {
+                    if (!isNaN(videoEl.duration)) {
+                        const progress = (videoEl.currentTime / videoEl.duration) * 100;
+                        seekbar.value = progress;
+                        currentTimeDisp.innerText = formatVideoTime(videoEl.currentTime);
+                        
+                        const timeLeft = videoEl.duration - videoEl.currentTime;
+                        durationDisp.innerText = '-' + formatVideoTime(timeLeft);
+
+                        syncFightByVideoTime(videoEl.currentTime);
+                    }
+                });
+
+                videoEl.addEventListener('ended', () => {
+                    videoEl.currentTime = timerSequence[TARGET_INDEX].videoTime;
+                    videoEl.play().catch(() => {});
+                });
+            }
+        }
+
+        function startFastCountingToTarget(targetMeron, targetWala) {
+            if (countingAnimationTimer) {
+                clearInterval(countingAnimationTimer);
+                countingAnimationTimer = null;
+            }
+
+            const savedFight = localStorage.getItem('swc_current_fight_idx');
+            const savedMeron = localStorage.getItem(`swc_meron_pool_${sequenceIndex}`);
+            const savedWala = localStorage.getItem(`swc_wala_pool_${sequenceIndex}`);
+            const savedStatus = localStorage.getItem(`swc_bet_status_${sequenceIndex}`);
+
+            if (savedFight !== null && parseInt(savedFight) === sequenceIndex && savedMeron !== null && savedWala !== null) {
+                meronPool = parseFloat(savedMeron);
+                walaPool = parseFloat(savedWala);
+                setBettingStatus(savedStatus === 'open');
+                recalculateOdds();
+                updateUI();
+
+                if (meronPool >= targetMeron && walaPool >= targetWala) {
+                    setBettingStatus(false);
+                    return;
+                }
+            } else {
+                meronPool = 100;
+                walaPool = 100;
+                setBettingStatus(true);
+                localStorage.setItem('swc_current_fight_idx', sequenceIndex);
+            }
+
+            let lastMeronK = Math.floor(meronPool / 1000);
+            let lastWalaK = Math.floor(walaPool / 1000);
+            
+            updateUI();
+
+            const frameInterval = 5; 
+            const stepAmount = 50; 
+
+            countingAnimationTimer = setInterval(() => {
+                let finishedMeron = false;
+                let finishedWala = false;
+
+                if (meronPool < targetMeron) {
+                    meronPool += stepAmount;
+                    let currentMeronK = Math.floor(meronPool / 1000);
+                    if (currentMeronK > lastMeronK && currentMeronK > 0) {
+                        lastMeronK = currentMeronK;
+                        meronPool += 500;
+                    }
+
+                    if (meronPool >= targetMeron) {
+                        meronPool = targetMeron;
+                        finishedMeron = true;
+                    }
+                } else {
+                    finishedMeron = true;
+                }
+
+                if (walaPool < targetWala) {
+                    walaPool += stepAmount;
+                    let currentWalaK = Math.floor(walaPool / 1000);
+                    if (currentWalaK > lastWalaK && currentWalaK > 0) {
+                        lastWalaK = currentWalaK;
+                        walaPool += 500;
+                    }
+
+                    if (walaPool >= targetWala) {
+                        walaPool = targetWala;
+                        finishedWala = true;
+                    }
+                } else {
+                    finishedWala = true;
+                }
+
+                localStorage.setItem(`swc_meron_pool_${sequenceIndex}`, meronPool);
+                localStorage.setItem(`swc_wala_pool_${sequenceIndex}`, walaPool);
+                localStorage.setItem(`swc_bet_status_${sequenceIndex}`, isBettingOpen ? 'open' : 'closed');
+
+                recalculateOdds();
+                updateUI();
+
+                if (finishedMeron && finishedWala) {
+                    meronPool = targetMeron;
+                    walaPool = targetWala;
+                    localStorage.setItem(`swc_meron_pool_${sequenceIndex}`, meronPool);
+                    localStorage.setItem(`swc_wala_pool_${sequenceIndex}`, walaPool);
+                    
+                    clearInterval(countingAnimationTimer);
+                    countingAnimationTimer = null;
+
+                    setBettingStatus(false);
+                    localStorage.setItem(`swc_bet_status_${sequenceIndex}`, 'closed');
+                    recalculateOdds();
+                    updateUI();
+                }
+            }, frameInterval);
+        }
+
+        function checkWinnerAndPay(winner) {
+            if (hasPaidWinnings) return;
+
+            let winnings = 0;
+            if (winner === 'meron' && meronUserBet > 0) {
+                winnings = meronUserBet * meronPayout;
+            } else if (winner === 'wala' && walaUserBet > 0) {
+                winnings = walaUserBet * walaPayout;
+            } else if (winner === 'draw' || winner === 'cancel' || winner === 'cancelled') {
+                winnings = meronUserBet + walaUserBet;
+            }
+
+            if (winnings > 0) {
+                walletBalance += winnings;
+                localStorage.setItem('swc_wallet', walletBalance);
+                hasPaidWinnings = true;
+                localStorage.setItem(`swc_paid_${sequenceIndex}`, 'true');
+                showToast(`Napanalunan: ${formatPHP(winnings)} pumasok sa wallet!`, "fa-trophy");
+                updateUI();
+            }
+        }
+
+        function syncFightByVideoTime(currentTime) {
+            let matchedIndex = TARGET_INDEX;
+        
+            for (let i = TARGET_INDEX; i < timerSequence.length; i++) {
+                if (currentTime < timerSequence[i].endTime) {
+                    matchedIndex = i;
+                    break;
+                } else if (currentTime >= timerSequence[i].endTime && currentTime <= timerSequence[i].endTime + 5) {
+                    matchedIndex = i;
+                    break;
+                } else {
+                    matchedIndex = Math.min(i + 1, timerSequence.length - 1);
+                }
+            }
+        
+            // KAPAG LUMIPAT NA SA BAGONG LABAN (NAG-NEXT FIGHT NA)
+            if (matchedIndex !== sequenceIndex) {
+                sequenceIndex = matchedIndex;
+                localStorage.setItem('swc_current_fight_idx', sequenceIndex);
+        
+                // KUKUNIN ANG PUSTA SA BAGONG FIGHT (AUTOMATIC 0 KAPAG WALA PA)
+                meronUserBet = localStorage.getItem(`swc_meron_user_bet_${sequenceIndex}`) ? parseFloat(localStorage.getItem(`swc_meron_user_bet_${sequenceIndex}`)) : 0.00;
+                walaUserBet = localStorage.getItem(`swc_wala_user_bet_${sequenceIndex}`) ? parseFloat(localStorage.getItem(`swc_wala_user_bet_${sequenceIndex}`)) : 0.00;
+                hasPaidWinnings = localStorage.getItem(`swc_paid_${sequenceIndex}`) === 'true';
+        
+                rebuildHistoryUpTo(sequenceIndex - 1);
+                renderCrystalRoadMap();
+                updateUI();
+        
+                const curr = timerSequence[sequenceIndex];
+                if (delayTimer) {
+                    clearTimeout(delayTimer);
+                    delayTimer = null;
+                }
+        
+                delayTimer = setTimeout(() => {
+                    startFastCountingToTarget(curr.meronMax, curr.walaMax);
+                }, 5000);
+            }
+        
+            // SINKRONISASYON NG WINNER OVERLAY AT PAYOUT
+            const activeRound = timerSequence[sequenceIndex];
+            const globalOverlay = document.getElementById('global-result-overlay');
+            const meronOverlay = document.getElementById('meron-winner-overlay');
+            const walaOverlay = document.getElementById('wala-winner-overlay');
+            
+            if (activeRound.endTime && currentTime >= activeRound.endTime && currentTime <= (activeRound.endTime + 5)) {
+                const winner = activeRound.winner;
+                checkWinnerAndPay(winner);
+                
+                if (winner === 'meron') {
+                    meronOverlay.classList.remove('hidden');
+                    walaOverlay.classList.add('hidden');
+                    globalOverlay.classList.add('hidden');
+                } else if (winner === 'wala') {
+                    walaOverlay.classList.remove('hidden');
+                    meronOverlay.classList.add('hidden');
+                    globalOverlay.classList.add('hidden');
+                } else if (winner === 'draw' || winner === 'cancel' || winner === 'cancelled') {
+                    meronOverlay.classList.add('hidden');
+                    walaOverlay.classList.add('hidden');
+                    globalOverlay.classList.remove('hidden');
+                }
+            } else {
+                meronOverlay.classList.add('hidden');
+                walaOverlay.classList.add('hidden');
+                globalOverlay.classList.add('hidden');
+            }
+        }
+
+        function rebuildHistoryUpTo(targetIdx) {
+            fightHistoryRecords = [];
+            for (let i = 0; i <= targetIdx && i < timerSequence.length; i++) {
+                fightHistoryRecords.push({
+                    fight: i + 1,
+                    winner: timerSequence[i].winner
+                });
+            }
+        }
+
+        function togglePlayPause() {
+            const videoEl = document.getElementById('live-video-element');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+
+            if (videoEl.paused) {
+                videoEl.play();
+                playPauseBtn.innerHTML = '<i class="fa-solid fa-pause text-xs"></i>';
+            } else {
+                videoEl.pause();
+                playPauseBtn.innerHTML = '<i class="fa-solid fa-play text-xs"></i>';
+            }
+        }
+
+        function seekVideo(val) {
+            const videoEl = document.getElementById('live-video-element');
+            if (videoEl && !isNaN(videoEl.duration)) {
+                const seekTime = (val / 100) * videoEl.duration;
+                videoEl.currentTime = seekTime;
+                if (isLockVideoState) {
+                    localStorage.setItem('swc_video_current_time', videoEl.currentTime);
+                }
+            }
+        }
+
+        function formatVideoTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
+        }
+
+        function toggleVideoControlsVisibility() {
+            const controlsBar = document.getElementById('video-controls-bar');
+            const toggleCheckbox = document.getElementById('video-controls-toggle');
+
+            if (toggleCheckbox.checked) {
+                controlsBar.classList.remove('hidden');
+            } else {
+                controlsBar.classList.add('hidden');
+            }
+        }
+
+        function checkExistingSession() {
+            const savedUser = localStorage.getItem('swc_logged_user');
+            if (savedUser) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('profile-username-display').innerText = savedUser.toUpperCase();
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const pwdInput = document.getElementById('login-password');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.className = 'fa-solid fa-eye-slash text-xs';
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.className = 'fa-solid fa-eye text-xs';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById('login-username').value.trim();
+            const passwordInput = document.getElementById('login-password').value.trim();
+
+            if (usernameInput && passwordInput) {
+                localStorage.setItem('swc_logged_user', usernameInput);
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('profile-username-display').innerText = usernameInput.toUpperCase();
+                
+                rebuildHistoryUpTo(sequenceIndex - 1);
+                renderCrystalRoadMap();
+                showToast(`Welcome back, ${usernameInput}!`, "fa-circle-check");
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            if (countingAnimationTimer) {
+                clearInterval(countingAnimationTimer);
+                countingAnimationTimer = null;
+            }
+
+            localStorage.removeItem('swc_logged_user');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('profile-dropdown').classList.add('hidden');
+            document.getElementById('side-menu').classList.add('hidden');
+            showToast("Signed out successfully.", "fa-right-from-bracket");
+        }
+
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
 
         function formatPHP(amount) {
             return '₱' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -398,114 +1042,18 @@
             document.getElementById('meron-pool').innerText = formatPHP(meronPool);
             document.getElementById('wala-pool').innerText = formatPHP(walaPool);
             
-            document.getElementById('meron-payout').innerText = meronPayout.toFixed(2);
-            document.getElementById('wala-payout').innerText = walaPayout.toFixed(2);
+            document.getElementById('meron-thanks').innerText = meronPayout.toFixed(2);
+            document.getElementById('wala-thanks').innerText = walaPayout.toFixed(2);
 
-            document.getElementById('meron-user-bet').innerText = `BET: ${formatPHP(meronUserBet + selectedBetAmounts.meron)}`;
-            document.getElementById('meron-user-pays').innerText = `PAYS: ${formatPHP((meronUserBet + selectedBetAmounts.meron) * meronPayout)}`;
+            document.getElementById('meron-user-bet').innerText = `BET: ${formatPHP(meronUserBet)}`;
+            document.getElementById('meron-user-pays').innerText = `PAYS: ${formatPHP(meronUserBet * meronPayout)}`;
 
-            document.getElementById('wala-user-bet').innerText = `BET: ${formatPHP(walaUserBet + selectedBetAmounts.wala)}`;
-            document.getElementById('wala-user-pays').innerText = `PAYS: ${formatPHP((walaUserBet + selectedBetAmounts.wala) * walaPayout)}`;
+            document.getElementById('wala-user-bet').innerText = `BET: ${formatPHP(walaUserBet)}`;
+            document.getElementById('wala-user-pays').innerText = `PAYS: ${formatPHP(walaUserBet * walaPayout)}`;
 
             document.getElementById('fight-num-display').innerText = sequenceIndex + 1;
-
-            const status = statusList[currentStatusIdx];
-            const badge = document.getElementById('fight-status-badge');
-            badge.className = `${status.color} font-extrabold text-xs px-3 py-1 rounded-sm uppercase tracking-wider flex items-center space-x-1.5 shadow`;
-            document.getElementById('status-text').innerText = status.text;
-
-            const isOpen = status.open && !maxLimitReached;
-            document.getElementById('btn-bet-meron').style.opacity = isOpen ? "1" : "0.6";
-            document.getElementById('btn-bet-wala').style.opacity = isOpen ? "1" : "0.6";
         }
 
-        // --- AUTOMATIC COUNTDOWN TIMER ---
-        function startAutoResetTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-
-            document.getElementById('meron-winner-overlay').classList.add('hidden');
-            document.getElementById('wala-winner-overlay').classList.add('hidden');
-            document.getElementById('global-result-overlay').classList.add('hidden');
-
-            currentStatusIdx = 0; 
-            maxLimitReached = false;
-            meronPool = 50000.00;
-            walaPool = 50000.00;
-            timerSeconds = timerSequence[sequenceIndex].seconds;
-
-            timerInterval = setInterval(() => {
-                if (timerSeconds > 0) {
-                    timerSeconds--;
-
-                    let mins = Math.floor(timerSeconds / 60);
-                    let secs = timerSeconds % 60;
-                    let formattedMins = mins < 10 ? "0" + mins : mins;
-                    let formattedSecs = secs < 10 ? "0" + secs : secs;
-
-                    document.getElementById('round-timer').innerText = `${formattedMins}:${formattedSecs}`;
-                } else {
-                    clearInterval(timerInterval);
-                    showRoundWinner();
-                }
-            }, 1000);
-        }
-
-        // --- SHOW ROUND WINNER ---
-        function showRoundWinner() {
-            currentStatusIdx = 2; // SETTLED
-            updateUI();
-
-            const roundData = timerSequence[sequenceIndex];
-            const winner = roundData.winner; 
-            const fightNumber = sequenceIndex + 1;
-
-            fightHistoryRecords.push({ fight: fightNumber, winner: winner });
-            renderCrystalRoadMap();
-
-            const globalOverlay = document.getElementById('global-result-overlay');
-            const resultTitle = document.getElementById('result-title-display');
-            const resultSub = document.getElementById('result-sub-text');
-            const iconContainer = document.getElementById('result-icon-container');
-
-            if (winner === 'meron') {
-                document.getElementById('meron-winner-overlay').classList.remove('hidden');
-                showToast(`Fight #${fightNumber} Settled: MERON WINS!`, "fa-trophy");
-            } else if (winner === 'wala') {
-                document.getElementById('wala-winner-overlay').classList.remove('hidden');
-                showToast(`Fight #${fightNumber} Settled: WALA WINS!`, "fa-trophy");
-            } else if (winner === 'draw') {
-                if (meronUserBet > 0 || walaUserBet > 0) {
-                    walletBalance += (meronUserBet + walaUserBet);
-                    showToast("DRAW! Bets returned to your wallet balance.", "fa-rotate-left");
-                }
-                
-                globalOverlay.className = "absolute inset-0 z-40 flex flex-col items-center justify-center p-4 bg-green-950/80 border-4 border-green-500 backdrop-blur-sm";
-                iconContainer.innerHTML = `<i class="fa-solid fa-handshake text-4xl green-glow-text mb-1 animate-bounce"></i>`;
-                resultTitle.className = "text-4xl font-black font-teko green-glow-text tracking-widest uppercase leading-none";
-                resultTitle.innerText = "DRAW!";
-                resultSub.innerText = "ALL BETS RETURNED TO WALLET";
-                globalOverlay.classList.remove('hidden');
-
-            } else if (winner === 'cancel' || winner === 'cancelled') {
-                if (meronUserBet > 0 || walaUserBet > 0) {
-                    walletBalance += (meronUserBet + walaUserBet);
-                    showToast("FIGHT CANCELLED! Bets returned to wallet.", "fa-ban");
-                }
-
-                globalOverlay.className = "absolute inset-0 z-40 flex flex-col items-center justify-center p-4 bg-gray-900/90 border-4 border-gray-500 backdrop-blur-sm";
-                iconContainer.innerHTML = `<i class="fa-solid fa-ban text-4xl gray-glow-text mb-1 animate-pulse"></i>`;
-                resultTitle.className = "text-4xl font-black font-teko gray-glow-text tracking-widest uppercase leading-none";
-                resultTitle.innerText = "CANCELLED";
-                resultSub.innerText = "FIGHT VOIDED / REFUNDED";
-                globalOverlay.classList.remove('hidden');
-            }
-
-            setTimeout(() => {
-                nextRound();
-            }, 4000);
-        }
-
-        // --- CRYSTAL ROAD MAP MATRIX LOGIC ---
         function renderCrystalRoadMap() {
             const grid = document.getElementById('crystal-road-grid');
             grid.innerHTML = '';
@@ -549,7 +1097,6 @@
 
                     if (item) {
                         let circleStyle = '';
-                        
                         if (item.winner === 'meron') {
                             circleStyle = 'border-red-500 text-red-400 bg-red-950/80 shadow-red-900/50';
                         } else if (item.winner === 'wala') {
@@ -571,14 +1118,11 @@
                 grid.appendChild(colDiv);
             });
 
-            // FIXED VIEWPORT POSITIONING:
-            // ALWAYS STAY AT TOP (scrollTop = 0) and FOCUS ON LATEST COLUMN (scrollLeft = max)
             const container = document.getElementById('road-map-scroll-container');
             container.scrollLeft = container.scrollWidth;
             container.scrollTop = 0;
         }
 
-        // --- MOUSE DRAG & TOUCH SCROLL PARA SA ROAD MAP ---
         function setupRoadMapDragScroll() {
             const slider = document.getElementById('road-map-scroll-container');
             let isDown = false;
@@ -593,112 +1137,40 @@
                 scrollTop = slider.scrollTop;
             });
 
-            slider.addEventListener('mouseleave', () => {
-                isDown = false;
-            });
-
-            slider.addEventListener('mouseup', () => {
-                isDown = false;
-            });
+            slider.addEventListener('mouseleave', () => { isDown = false; });
+            slider.addEventListener('mouseup', () => { isDown = false; });
 
             slider.addEventListener('mousemove', (e) => {
                 if (!isDown) return;
                 e.preventDefault();
                 const x = e.pageX - slider.offsetLeft;
                 const y = e.pageY - slider.offsetTop;
-                const walkX = (x - startX) * 1.5;
-                const walkY = (y - startY) * 1.5;
-                slider.scrollLeft = scrollLeft - walkX;
-                slider.scrollTop = scrollTop - walkY;
+                slider.scrollLeft = scrollLeft - ((x - startX) * 1.5);
+                slider.scrollTop = scrollTop - ((y - startY) * 1.5);
             });
         }
 
-        // --- LIVE POOL ODDS SIMULATION ---
         function toggleLivePoolSimulation() {
             const isChecked = document.getElementById('live-pool-toggle').checked;
             if (isChecked) {
-                if (!poolSimulationInterval) {
-                    poolSimulationInterval = setInterval(() => {
-                        if (statusList[currentStatusIdx].open && !maxLimitReached) {
-                            const meronInc = (Math.random() * 15000) + 300.50;
-                            const walaInc = (Math.random() * 15000) + 300.50;
-
-                            let meronReached = meronPool >= currentMeronMax;
-                            let walaReached = walaPool >= currentWalaMax;
-
-                            if (!meronReached) {
-                                meronPool = Math.min(currentMeronMax, meronPool + meronInc);
-                            }
-                            if (!walaReached) {
-                                walaPool = Math.min(currentWalaMax, walaPool + walaInc);
-                            }
-
-                            recalculateOdds();
-                            updateUI();
-
-                            if (meronPool >= currentMeronMax || walaPool >= currentWalaMax) {
-                                maxLimitReached = true;
-                                currentStatusIdx = 1; // CLOSED
-                                showToast("Max pool limit reached! Status changed to CLOSED.", "fa-triangle-exclamation");
-                                updateUI();
-                            }
-                        }
-                    }, 500); 
-                }
+                startFastCountingToTarget(timerSequence[sequenceIndex].meronMax, timerSequence[sequenceIndex].walaMax);
             } else {
-                if (poolSimulationInterval) {
-                    clearInterval(poolSimulationInterval);
-                    poolSimulationInterval = null;
+                if (countingAnimationTimer) {
+                    clearInterval(countingAnimationTimer);
+                    countingAnimationTimer = null;
                 }
             }
-        }
-
-        function nextRound() {
-            sequenceIndex++;
-            if (sequenceIndex >= timerSequence.length) {
-                sequenceIndex = 0; 
-            }
-
-            meronUserBet = 0.00;
-            walaUserBet = 0.00;
-
-            timerSeconds = timerSequence[sequenceIndex].seconds;
-            currentMeronMax = timerSequence[sequenceIndex].meronMax;
-            currentWalaMax = timerSequence[sequenceIndex].walaMax;
-
-            startAutoResetTimer();
-            recalculateOdds();
-            updateUI();
-            showToast(`Fight #${sequenceIndex + 1} Started - OPEN FOR BETTING!`, "fa-arrows-rotate");
-        }
-
-        function addQuickBet(side, amount) {
-            if (!statusList[currentStatusIdx].open || maxLimitReached) {
-                showToast("Betting is currently CLOSED", "fa-triangle-exclamation");
-                return;
-            }
-
-            const currentPending = selectedBetAmounts[side];
-            if (walletBalance < currentPending + amount) {
-                showToast("Insufficient Wallet Balance!", "fa-circle-xmark");
-                return;
-            }
-
-            selectedBetAmounts[side] += amount;
-            updateUI();
-            showToast(`Added +₱${amount} to ${side.toUpperCase()} input`, "fa-circle-plus");
         }
 
         function placeBet(side) {
-            if (!statusList[currentStatusIdx].open || maxLimitReached) {
-                showToast("Cannot place bet. Fight status is CLOSED.", "fa-triangle-exclamation");
+            if (!isBettingOpen) {
+                showToast("Betting is CLOSED!", "fa-lock");
                 return;
             }
 
-            const betAmount = selectedBetAmounts[side];
-            
+            const betAmount = activeChipValue;
             if (betAmount <= 0) {
-                showToast("Tap +100, +500, or +1k to choose bet amount", "fa-info-circle");
+                showToast("Select a chip or ALL IN first", "fa-info-circle");
                 return;
             }
 
@@ -707,16 +1179,20 @@
                 if (side === 'meron') {
                     meronUserBet += betAmount;
                     meronPool += betAmount;
-                    selectedBetAmounts.meron = 0;
+                    localStorage.setItem(`swc_meron_user_bet_${sequenceIndex}`, meronUserBet);
                 } else {
                     walaUserBet += betAmount;
                     walaPool += betAmount;
-                    selectedBetAmounts.wala = 0;
+                    localStorage.setItem(`swc_wala_user_bet_${sequenceIndex}`, walaUserBet);
                 }
+
+                localStorage.setItem('swc_wallet', walletBalance);
+                localStorage.setItem(`swc_meron_pool_${sequenceIndex}`, meronPool);
+                localStorage.setItem(`swc_wala_pool_${sequenceIndex}`, walaPool);
 
                 recalculateOdds();
                 updateUI();
-                showToast(`Successfully placed ${formatPHP(betAmount)} on ${side.toUpperCase()}!`, "fa-circle-check");
+                showToast(`Placed ${formatPHP(betAmount)} on ${side.toUpperCase()}!`, "fa-circle-check");
             } else {
                 showToast("Insufficient balance!", "fa-circle-xmark");
             }
@@ -738,51 +1214,11 @@
             currentStatusIdx = (currentStatusIdx + 1) % statusList.length;
             const status = statusList[currentStatusIdx];
             
-            if (status.open) {
-                maxLimitReached = false;
-                timerSeconds = timerSequence[sequenceIndex].seconds;
-                startAutoResetTimer();
-            }
-
-            const badge = document.getElementById('fight-status-badge');
-            badge.className = `${status.color} font-extrabold text-xs px-3 py-1 rounded-sm uppercase tracking-wider flex items-center space-x-1.5 shadow`;
-            document.getElementById('status-text').innerText = status.text;
+            setBettingStatus(status.open);
+            localStorage.setItem(`swc_bet_status_${sequenceIndex}`, status.open ? 'open' : 'closed');
 
             showToast(`Fight Status set to: ${status.text}`, "fa-gear");
             updateUI();
-        }
-
-        function toggleStreamMode() {
-            isLiveStream = !isLiveStream;
-            const errorView = document.getElementById('video-error-view');
-            const liveView = document.getElementById('video-live-view');
-            const label = document.getElementById('stream-label');
-
-            if (isLiveStream) {
-                errorView.classList.add('hidden');
-                liveView.classList.remove('hidden');
-                label.innerText = 'STREAM (LIVE)';
-                showToast("Switched to Live Arena Feed", "fa-video");
-            } else {
-                errorView.classList.remove('hidden');
-                liveView.classList.add('hidden');
-                label.innerText = 'V1';
-                showToast("Switched to Main V1 Backup Stream", "fa-video");
-            }
-        }
-
-        function refreshStream() {
-            showToast("Re-synchronizing video stream signature...", "fa-rotate");
-        }
-
-        function toggleFullscreen() {
-            showToast("Fullscreen mode triggered", "fa-expand");
-        }
-
-        function resetWallet() {
-            walletBalance += 1000;
-            updateUI();
-            showToast("Added ₱1,000.00 test funds to wallet!", "fa-wallet");
         }
 
         function toggleSideMenu() {
@@ -809,3 +1245,4 @@
     </script>
 </body>
 </html>
+
